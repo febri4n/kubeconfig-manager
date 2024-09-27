@@ -1,0 +1,21 @@
+#!/bin/bash
+
+CONFIG_DIR="$HOME/.kube/config-file"
+ACTIVE_CONFIG="$HOME/.kube/config"
+
+# Membuat direktori jika belum ada
+mkdir -p "$CONFIG_DIR"
+
+# Fungsi untuk memilih dan mengganti kubeconfig aktif
+switch_config() {
+    selected=$(ls "$CONFIG_DIR" | fzf --prompt="Pilih kubeconfig: ")
+    if [ -n "$selected" ]; then
+        ln -sf "$CONFIG_DIR/$selected" "$ACTIVE_CONFIG"
+        echo "Kubeconfig diubah ke: $selected"
+    else
+        echo "Tidak ada kubeconfig yang dipilih."
+    fi
+}
+
+# Langsung jalankan fungsi switch_config
+switch_config
