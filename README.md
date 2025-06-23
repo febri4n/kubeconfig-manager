@@ -1,48 +1,87 @@
 # Kubeconfig Manager
 
-Kubeconfig Manager adalah skrip bash sederhana yang memungkinkan Anda untuk dengan mudah mengganti kubeconfig aktif di sistem Anda. Skrip ini menggunakan fuzzy finder (fzf) untuk memberikan antarmuka yang nyaman dalam memilih kubeconfig.
+Tool sederhana untuk switching kubeconfig dengan mudah menggunakan fuzzy finder.
 
-## Fitur
+## Kenapa ada tool ini?
 
-- Menampilkan daftar kubeconfig yang tersedia menggunakan fuzzy finder
-- Mengubah kubeconfig aktif dengan cepat
-- Simpel dan mudah digunakan
+Kalau kamu sering kerja dengan multiple Kubernetes cluster, pasti familiar dengan ribet-nya ganti-ganti kubeconfig. Tool ini dibuat untuk menyelesaikan masalah itu - cukup ketik `kube` dan pilih config yang mau dipakai.
 
-## Prasyarat
+## Yang dibutuhkan
 
-Sebelum menggunakan skrip ini, pastikan Anda telah menginstal:
+- `fzf` - buat fuzzy finder interface
+- `bash` - udah pasti ada di Unix-like systems
 
-1. `bash` (biasanya sudah terinstal di sebagian besar sistem Unix-like)
-2. `fzf` (Fuzzy Finder) - [Panduan Instalasi fzf](https://github.com/junegunn/fzf#installation)
+Install fzf:
+```bash
+# macOS
+brew install fzf
 
-## Instalasi
+# Ubuntu/Debian
+sudo apt install fzf
 
-1. Clone repositori ini atau unduh file `kube` ke sistem Anda.
+# Arch Linux
+sudo pacman -S fzf
+```
 
-2. Buat file `kube` dapat dieksekusi:
-3. Pindahkan file `kube` ke direktori yang ada dalam PATH Anda, misalnya:
+## Setup
+
+1. Download atau clone repo ini
+2. Jadikan executable:
+   ```bash
+   chmod +x kube
+   ```
+
+3. Pindah ke PATH:
+   ```bash
    sudo mv kube /usr/local/bin/
-4. Buat direktori untuk menyimpan file-file kubeconfig Anda (jika belum ada):
+   ```
+
+4. Buat folder untuk nyimpan config files:
+   ```bash
    mkdir -p ~/.kube/config-file
-5. Pindahkan atau salin file-file kubeconfig Anda ke direktori `~/.kube/config-file/`.
+   ```
 
-## Penggunaan
+5. Pindahin semua kubeconfig ke folder tersebut:
+   ```bash
+   cp your-kubeconfig-files ~/.kube/config-file/
+   ```
 
-1. Buka terminal.
+## Cara pakai
 
-2. Jalankan skrip dengan mengetikkan:
-   kube
-3. Gunakan fuzzy finder untuk memilih kubeconfig yang ingin Anda gunakan.
+Tinggal ketik di terminal:
+```bash
+kube
+```
 
-4. Tekan Enter untuk mengonfirmasi pilihan Anda.
+Nanti akan muncul list config yang tersedia, pilih yang mau dipakai dengan arrow keys atau ketik untuk search, tekan Enter untuk konfirmasi.
 
-Skrip akan secara otomatis mengubah kubeconfig aktif Anda ke file yang dipilih.
+## Struktur folder
 
-## Catatan
+```
+~/.kube/
+├── config              # current active kubeconfig
+└── config-file/        # tempat nyimpan semua kubeconfig
+    ├── prod-cluster
+    ├── staging-cluster
+    └── dev-cluster
+```
 
-- Skrip ini mengasumsikan bahwa file kubeconfig aktif Anda berada di `~/.kube/config`.
-- Semua file kubeconfig yang ingin Anda kelola harus disimpan di direktori `~/.kube/config-file/`.
+## Troubleshooting
 
-## Kontribusi
+**Error "fzf: command not found"**
+- Install fzf sesuai OS kamu
 
-Kontribusi untuk proyek ini sangat diterima. Jangan ragu untuk membuat issue atau pull request.
+**Tidak ada config yang muncul**
+- Pastikan file kubeconfig ada di `~/.kube/config-file/`
+- Check permission file bisa di-read
+
+**Permission denied**
+- Pastikan script sudah executable: `chmod +x kube`
+
+## Contributing
+
+Pull request welcome! Kalau ada bug atau feature request, silakan buat issue.
+
+## License
+
+MIT License - bebas dipakai dan dimodifikasi.
